@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Алексей Кичигин</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Основной контейнер */
+        .container {
+            display: flex;
+            flex-direction: row;
+            min-height: 100vh;
+            width: 100%;
+        }
+
+        /* Левая секция (Алексей) */
+        .hero-section {
+            flex: 1;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        .kichigin-wrapper {
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.1s ease-out;
+            will-change: transform;
+        }
+
+        .kichigin-img {
+            max-width: 100%;
+            max-height: 80vh;
+            object-fit: contain;
+            display: block;
+            user-select: none;
+        }
+
+        /* Базовые стили для спичбаббла */
+        .speech-bubble {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-15px);
+            background: #ffffff;
+            color: #000000;
+            padding: 15px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            white-space: nowrap;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            z-index: 10;
+        }
+
+        /* Хвостик облачка */
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 10px;
+            border-style: solid;
+            border-color: #ffffff transparent transparent transparent;
+        }
+
+        .speech-bubble.active {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Облачко с видео */
+        .video-bubble {
+            padding: 8px;
+            white-space: normal;
+        }
+
+        .video-bubble video {
+            width: 280px;
+            max-width: 80vw;
+            border-radius: 12px;
+            display: block;
+        }
+
+        /* Правая секция (Контент) */
+        .content-section {
+            flex: 1;
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: #1e1e1e;
+        }
+
+        .content-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #ff4757;
+        }
+
+        .content-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            color: #ddd;
+        }
+
+        .content-img {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Мобильные стили */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .hero-section {
+                min-height: 50vh;
+                padding-top: 80px; /* Запас сверху под баббл */
+            }
+
+            .kichigin-img {
+                max-height: 40vh;
+            }
+
+            .content-section {
+                padding: 40px 20px;
+            }
+
+            .content-title {
+                font-size: 1.8rem;
+            }
+
+            .speech-bubble {
+                font-size: 0.9rem;
+                padding: 10px 15px;
+            }
+
+            .video-bubble video {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <section class="hero-section">
+            <div class="kichigin-wrapper" id="kichiginWrapper">
+                
+                <div class="speech-bubble" id="textBubble">
+                    я не пизжу сейчас, мне это зачем
+                </div>
+
+                <div class="speech-bubble video-bubble" id="videoBubble">
+                    <video id="musorVideo" src="musordrop.mp4" playsinline></video>
+                </div>
+
+                <img src="kichigin.png" alt="Алексей Кичигин" class="kichigin-img">
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h1 class="content-title">Легенда местного масштаба</h1>
+            <p class="content-text">
+                Здесь находится описание главного героя. Нажмите на Кичигина слева, чтобы проверить его на честность.
+            </p>
+            <img src="https://via.placeholder.com/600x400" alt="Контентное фото" class="content-img">
+        </section>
+    </div>
+
+    <audio id="pizdabolAudio" src="pizdabol.ogg" preload="auto"></audio>
+
+    <script>
+        const wrapper = document.getElementById('kichiginWrapper');
+        const textBubble = document.getElementById('textBubble');
+        const videoBubble = document.getElementById('videoBubble');
+        const audio = document.getElementById('pizdabolAudio');
+        const video = document.getElementById('musorVideo');
+
+        let isAnimating = false;
+
+        // Эффект параллакса при движении мыши (только на десктопе)
+        document.addEventListener('mousemove', (e) => {
+            if (window.innerWidth > 768) {
+                const moveX = (e.clientX - window.innerWidth / 2) * 0.03;
+                const moveY = (e.clientY - window.innerHeight / 2) * 0.03;
+                wrapper.style.transform = `translate3d(${moveX}px, ${moveY}px, 0)`;
+            }
+        });
+
+        // Сброс позиционирования при изменении размера экрана
+        window.addEventListener('resize', () => {
+            if (window.innerWidth <= 768) {
+                wrapper.style.transform = 'none';
+            }
+        });
+
+        // Плавный сброс активных элементов
+        function hideBubbles() {
+            textBubble.classList.remove('active');
+            videoBubble.classList.remove('active');
+            
+            audio.pause();
+            audio.currentTime = 0;
+            
+            video.pause();
+            video.currentTime = 0;
+        }
+
+        // Клик по Кичигину
+        wrapper.addEventListener('click', () => {
+            // Предотвращаем спам кликами во время показа
+            if (isAnimating) return;
+            isAnimating = true;
+
+            hideBubbles();
+
+            // Шанс 50/50
+            const randomEvent = Math.random() < 0.5;
+
+            if (randomEvent) {
+                // Шанс 50%: Текст + Звук
+                textBubble.classList.add('active');
+                audio.play().catch(() => {});
+
+                setTimeout(() => {
+                    textBubble.classList.remove('active');
+                    isAnimating = false;
+                }, 3000);
+            } else {
+                // Шанс 50%: Видео со звуком
+                videoBubble.classList.add('active');
+                video.play().catch(() => {});
+
+                // Скрываем облачко после окончания видео
+                video.onended = () => {
+                    videoBubble.classList.remove('active');
+                    isAnimating = false;
+                };
+
+                // Фолбэк на случай ошибки или слишком длинного видео (макс 10 сек)
+                setTimeout(() => {
+                    if (videoBubble.classList.contains('active')) {
+                        videoBubble.classList.remove('active');
+                        video.pause();
+                        isAnimating = false;
+                    }
+                }, 10000);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,1 +1,1 @@
-[download mobileconfig](https://github.com/2b0ca83a-e65a-4074-ac1e-7fce59742d47)
+[download mobileconfig](https://github.com/Nikita-zloy/www.itssasha.ru/releases/download/%D1%85%D0%B7/kichigin.mobileconfig)

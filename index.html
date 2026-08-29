@@ -227,8 +227,9 @@
             display: block;
         }
 
-        /* Анимации для переключателей и плееров */
+        /* Контейнер плееров */
         .music-player-wrapper {
+            position: relative;
             width: 100%;
             max-width: 500px;
             border-radius: 16px;
@@ -236,11 +237,28 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(168, 85, 247, 0.2);
             border: 1px solid rgba(168, 85, 247, 0.3);
             background: #000000;
-            transition: border-color 0.4s ease, box-shadow 0.4s ease;
+            transition: border-color 0.4s ease, box-shadow 0.4s ease, height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        /* Группы платформ с плавной сменой видимости и кроссфейдом */
         .platform-group {
-            transition: opacity 0.35s ease;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s ease;
+            transform: scale(0.98);
+        }
+
+        .platform-group.active-platform {
+            position: relative;
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            transform: scale(1);
         }
 
         .track-item {
@@ -249,11 +267,11 @@
             opacity: 0;
             visibility: hidden;
             max-height: 0;
-            transform: translateY(6px);
-            transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                        transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                        visibility 0.35s ease,
-                        max-height 0.35s ease;
+            transform: translateY(10px);
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                        transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                        visibility 0.4s ease,
+                        max-height 0.4s ease;
         }
 
         .track-item.active {
@@ -278,8 +296,9 @@
             height: 166px;
         }
 
-        /* Переключатель платформ */
+        /* Плавная переключалка источников (Платформ) со скользящей кареткой */
         .platform-toggle {
+            position: relative;
             display: flex;
             background: rgba(23, 9, 44, 0.9);
             border: 1px solid rgba(168, 85, 247, 0.4);
@@ -289,8 +308,32 @@
             width: 100%;
             max-width: 320px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            position: relative;
             transition: border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        /* Каретка для тумблера источника */
+        .platform-thumb {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            height: calc(100% - 8px);
+            width: calc(50% - 4px);
+            border-radius: 25px;
+            transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1), background 0.4s ease, box-shadow 0.4s ease;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .platform-toggle.yandex-mode .platform-thumb {
+            transform: translateX(0);
+            background: linear-gradient(135deg, #ffcc00 0%, #ff9900 100%);
+            box-shadow: 0 0 16px rgba(255, 204, 0, 0.5);
+        }
+
+        .platform-toggle.soundcloud-mode .platform-thumb {
+            transform: translateX(100%);
+            background: linear-gradient(135deg, #ff5500 0%, #ff2200 100%);
+            box-shadow: 0 0 16px rgba(255, 85, 0, 0.5);
         }
 
         .platform-btn {
@@ -303,7 +346,7 @@
             font-size: 0.9rem;
             font-weight: 700;
             cursor: pointer;
-            transition: color 0.3s ease, background 0.4s ease, box-shadow 0.4s ease, transform 0.15s ease;
+            transition: color 0.3s ease, transform 0.15s ease;
             z-index: 1;
         }
 
@@ -311,20 +354,14 @@
             transform: scale(0.96);
         }
 
-        /* Брендовые стили для активных кнопок */
-        .platform-btn.active.yandex-active {
-            background: linear-gradient(135deg, #ffcc00 0%, #ff9900 100%);
+        .platform-btn.active-yandex {
             color: #000000;
-            box-shadow: 0 0 16px rgba(255, 204, 0, 0.5);
         }
 
-        .platform-btn.active.soundcloud-active {
-            background: linear-gradient(135deg, #ff5500 0%, #ff2200 100%);
+        .platform-btn.active-soundcloud {
             color: #ffffff;
-            box-shadow: 0 0 16px rgba(255, 85, 0, 0.5);
         }
 
-        /* Динамические свечения рамки тумблера */
         .platform-toggle.yandex-theme {
             border-color: rgba(255, 204, 0, 0.5);
             box-shadow: 0 0 15px rgba(255, 204, 0, 0.2);
@@ -335,8 +372,9 @@
             box-shadow: 0 0 15px rgba(255, 85, 0, 0.2);
         }
 
-        /* Слайдер треков */
+        /* Слайдер треков с плавающей кареткой-анимацией */
         .track-selector {
+            position: relative;
             width: 100%;
             max-width: 500px;
             margin-top: 12px;
@@ -358,7 +396,23 @@
             border-radius: 10px;
         }
 
+        /* Скользящий ползунок выбора трека */
+        .slider-thumb {
+            position: absolute;
+            top: 8px;
+            left: 0;
+            height: calc(100% - 16px);
+            background: linear-gradient(135deg, #a855f7 0%, #6b21a8 100%);
+            border-radius: 20px;
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.6);
+            transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1), width 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+            pointer-events: none;
+            z-index: 0;
+        }
+
         .track-btn {
+            position: relative;
+            z-index: 1;
             background: rgba(23, 9, 44, 0.8);
             border: 1px solid rgba(168, 85, 247, 0.3);
             color: #d8b4fe;
@@ -368,14 +422,13 @@
             font-weight: 600;
             cursor: pointer;
             white-space: nowrap;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
         }
 
         .track-btn:hover {
             border-color: rgba(168, 85, 247, 0.8);
             color: #ffffff;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
         }
 
         .track-btn:active {
@@ -383,11 +436,9 @@
         }
 
         .track-btn.active {
-            background: linear-gradient(135deg, #a855f7 0%, #6b21a8 100%);
+            background: transparent;
             color: #ffffff;
-            border-color: #a855f7;
-            box-shadow: 0 0 15px rgba(168, 85, 247, 0.5);
-            transform: scale(1.03);
+            border-color: transparent;
         }
 
         /* Мобильные стили */
@@ -466,7 +517,7 @@
                 <!-- Блок плееров -->
                 <div class="music-player-wrapper">
                     <!-- Яндекс Музыка -->
-                    <div class="platform-group yandex-group">
+                    <div class="platform-group yandex-group active-platform">
                         <div class="track-item active" frameborder="0" allow="clipboard-write">
                             <iframe src="https://music.yandex.ru/iframe/album/28122625/track/119057912"></iframe>
                         </div>
@@ -488,7 +539,7 @@
                     </div>
 
                     <!-- SoundCloud -->
-                    <div class="platform-group soundcloud-group" style="display: none;">
+                    <div class="platform-group soundcloud-group">
                         <div class="track-item soundcloud-item">
                             <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A1661173662&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=false"></iframe>
                         </div>
@@ -510,14 +561,16 @@
                     </div>
                 </div>
 
-                <!-- Переключатель источников -->
-                <div class="platform-toggle yandex-theme">
-                    <button class="platform-btn active yandex-active" id="btnYandex" onclick="switchPlatform('yandex')">Я.Музыка</button>
+                <!-- Переключатель источников с плавной кареткой -->
+                <div class="platform-toggle yandex-mode yandex-theme" id="platformToggle">
+                    <div class="platform-thumb" id="platformThumb"></div>
+                    <button class="platform-btn active-yandex" id="btnYandex" onclick="switchPlatform('yandex')">Я.Музыка</button>
                     <button class="platform-btn" id="btnSoundcloud" onclick="switchPlatform('soundcloud')">SoundCloud</button>
                 </div>
 
-                <!-- Переключатель треков -->
-                <div class="track-selector">
+                <!-- Переключатель треков с подложкой-слайдером -->
+                <div class="track-selector" id="trackSelector">
+                    <div class="slider-thumb" id="sliderThumb"></div>
                     <button class="track-btn active" onclick="switchTrack(0)">Я утонул в своей ванной</button>
                     <button class="track-btn" onclick="switchTrack(1)">Ржавый</button>
                     <button class="track-btn" onclick="switchTrack(2)">Грязный кайф</button>
@@ -545,7 +598,7 @@
         let currentPlatform = 'yandex';
         let currentTrackIndex = 0;
 
-        // Переключение платформы с анимацией и брендовыми цветами
+        // Плавное переключение платформы источника
         function switchPlatform(platform) {
             currentPlatform = platform;
 
@@ -553,33 +606,41 @@
             const soundcloudGroup = document.querySelector('.soundcloud-group');
             const btnYandex = document.getElementById('btnYandex');
             const btnSoundcloud = document.getElementById('btnSoundcloud');
-            const toggleContainer = document.querySelector('.platform-toggle');
+            const toggleContainer = document.getElementById('platformToggle');
 
             if (platform === 'yandex') {
-                yandexGroup.style.display = 'block';
-                soundcloudGroup.style.display = 'none';
+                yandexGroup.classList.add('active-platform');
+                soundcloudGroup.classList.remove('active-platform');
 
-                btnYandex.classList.add('active', 'yandex-active');
-                btnYandex.classList.remove('soundcloud-active');
-                
-                btnSoundcloud.classList.remove('active', 'soundcloud-active', 'yandex-active');
+                toggleContainer.classList.add('yandex-mode', 'yandex-theme');
+                toggleContainer.classList.remove('soundcloud-mode', 'soundcloud-theme');
 
-                toggleContainer.classList.add('yandex-theme');
-                toggleContainer.classList.remove('soundcloud-theme');
+                btnYandex.classList.add('active-yandex');
+                btnSoundcloud.classList.remove('active-soundcloud');
             } else {
-                yandexGroup.style.display = 'none';
-                soundcloudGroup.style.display = 'block';
+                soundcloudGroup.classList.add('active-platform');
+                yandexGroup.classList.remove('active-platform');
 
-                btnSoundcloud.classList.add('active', 'soundcloud-active');
-                btnSoundcloud.classList.remove('yandex-active');
+                toggleContainer.classList.add('soundcloud-mode', 'soundcloud-theme');
+                toggleContainer.classList.remove('yandex-mode', 'yandex-theme');
 
-                btnYandex.classList.remove('active', 'yandex-active', 'soundcloud-active');
-
-                toggleContainer.classList.add('soundcloud-theme');
-                toggleContainer.classList.remove('yandex-theme');
+                btnSoundcloud.classList.add('active-soundcloud');
+                btnYandex.classList.remove('active-yandex');
             }
 
             updateTrackVisibility();
+        }
+
+        // Анимированный переезд каретки слайдера треков
+        function moveSliderThumb(index) {
+            const buttons = document.querySelectorAll('.track-btn');
+            const thumb = document.getElementById('sliderThumb');
+            const targetBtn = buttons[index];
+
+            if (targetBtn && thumb) {
+                thumb.style.width = `${targetBtn.offsetWidth}px`;
+                thumb.style.transform = `translateX(${targetBtn.offsetLeft}px)`;
+            }
         }
 
         // Переключение трека по индексу
@@ -591,6 +652,8 @@
             buttons.forEach((btn, i) => {
                 btn.classList.toggle('active', i === index);
             });
+
+            moveSliderThumb(index);
         }
 
         // Обновление видимости активного трека
@@ -603,8 +666,18 @@
             });
         }
 
-        // Инициализируем верную тему при загрузке
-        switchPlatform('yandex');
+        // Инициализация при загрузке
+        window.addEventListener('load', () => {
+            switchPlatform('yandex');
+            switchTrack(0);
+        });
+
+        window.addEventListener('resize', () => {
+            moveSliderThumb(currentTrackIndex);
+            if (window.innerWidth <= 768) {
+                wrapper.style.transform = 'none';
+            }
+        });
 
         // Параллакс мыши
         document.addEventListener('mousemove', (e) => {
@@ -612,12 +685,6 @@
                 const moveX = (e.clientX - window.innerWidth / 2) * 0.025;
                 const moveY = (e.clientY - window.innerHeight / 2) * 0.025;
                 wrapper.style.transform = `translate3d(${moveX}px, ${moveY}px, 0)`;
-            }
-        });
-
-        window.addEventListener('resize', () => {
-            if (window.innerWidth <= 768) {
-                wrapper.style.transform = 'none';
             }
         });
 

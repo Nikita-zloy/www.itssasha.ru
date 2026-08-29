@@ -27,15 +27,15 @@
             width: 100%;
         }
 
-        /* Левая секция (Алексей) */
+        /* Левая секция (Алексей) — опущен ниже */
         .hero-section {
             flex: 1;
             position: relative;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-end; /* Опускает Кичигина к низу блока */
             overflow: hidden;
-            padding: 20px;
+            padding: 100px 20px 20px 20px; /* Добавлен отступ сверху, чтобы опустить ниже */
         }
 
         .kichigin-wrapper {
@@ -47,7 +47,7 @@
 
         .kichigin-img {
             max-width: 100%;
-            max-height: 80vh;
+            max-height: 70vh; /* Слегка уменьшено, чтобы сидел ниже */
             object-fit: contain;
             display: block;
             user-select: none;
@@ -140,8 +140,9 @@
             }
 
             .hero-section {
-                min-height: 50vh;
-                padding-top: 80px; /* Запас сверху под баббл */
+                min-height: 60vh;
+                padding-top: 120px;
+                align-items: center; /* На мобилке центрируем для стабильности layout */
             }
 
             .kichigin-img {
@@ -174,7 +175,7 @@
             <div class="kichigin-wrapper" id="kichiginWrapper">
                 
                 <div class="speech-bubble" id="textBubble">
-                    я не пизжу сейчас, мне это зачем
+                    я не пиздю сейчас, мне это зачем
                 </div>
 
                 <div class="speech-bubble video-bubble" id="videoBubble">
@@ -204,6 +205,7 @@
         const video = document.getElementById('musorVideo');
 
         let isAnimating = false;
+        let videoTimeout = null;
 
         // Эффект параллакса при движении мыши (только на десктопе)
         document.addEventListener('mousemove', (e) => {
@@ -231,11 +233,15 @@
             
             video.pause();
             video.currentTime = 0;
+
+            if (videoTimeout) {
+                clearTimeout(videoTimeout);
+                videoTimeout = null;
+            }
         }
 
         // Клик по Кичигину
         wrapper.addEventListener('click', () => {
-            // Предотвращаем спам кликами во время показа
             if (isAnimating) return;
             isAnimating = true;
 
@@ -254,24 +260,26 @@
                     isAnimating = false;
                 }, 3000);
             } else {
-                // Шанс 50%: Видео со звуком
+                // Шанс 50%: Видео (ровно до 13 сек)
                 videoBubble.classList.add('active');
+                video.currentTime = 0;
                 video.play().catch(() => {});
 
-                // Скрываем облачко после окончания видео
+                // Скрытие при естественном окончании видео (если оно короче 13 сек)
                 video.onended = () => {
-                    videoBubble.classList.remove('active');
-                    isAnimating = false;
-                };
-
-                // Фолбэк на случай ошибки или слишком длинного видео (макс 10 сек)
-                setTimeout(() => {
                     if (videoBubble.classList.contains('active')) {
-                        videoBubble.classList.remove('active');
-                        video.pause();
+                        hideBubbles();
                         isAnimating = false;
                     }
-                }, 10000);
+                };
+
+                // Принудительное скрытие строго через 13 секунд (13000 миллисекунд)
+                videoTimeout = setTimeout(() => {
+                    if (videoBubble.classList.contains('active')) {
+                        hideBubbles();
+                        isAnimating = false;
+                    }
+                }, 13000);
             }
         });
     </script>

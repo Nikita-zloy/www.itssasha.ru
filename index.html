@@ -238,22 +238,63 @@
             background: #000000;
         }
 
-        .track-iframe {
+        .track-item {
             display: none;
+            width: 100%;
+        }
+
+        .track-item.active {
+            display: block;
+        }
+
+        .track-item iframe {
             width: 100%;
             height: 210px;
             border: none;
+            display: block;
         }
 
-        .track-iframe.active {
-            display: block;
+        .soundcloud-item iframe {
+            height: 166px;
+        }
+
+        /* Тумблер Платформы */
+        .platform-toggle {
+            display: flex;
+            background: rgba(23, 9, 44, 0.9);
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            border-radius: 30px;
+            padding: 4px;
+            margin-top: 15px;
+            width: 100%;
+            max-width: 320px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .platform-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #d8b4fe;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .platform-btn.active {
+            background: linear-gradient(135deg, #a855f7 0%, #6b21a8 100%);
+            color: #ffffff;
+            box-shadow: 0 0 12px rgba(168, 85, 247, 0.5);
         }
 
         /* Слайдер / Переключатель треков */
         .track-selector {
             width: 100%;
             max-width: 500px;
-            margin-top: 15px;
+            margin-top: 12px;
             display: flex;
             gap: 8px;
             overflow-x: auto;
@@ -372,15 +413,58 @@
 
                 <!-- Блок плееров -->
                 <div class="music-player-wrapper">
-                    <iframe class="track-iframe active" frameborder="0" allow="clipboard-write" src="https://music.yandex.ru/iframe/album/28122625/track/119057912"></iframe>
-                    <iframe class="track-iframe" frameborder="0" allow="clipboard-write" src="https://music.yandex.ru/iframe/album/28122625/track/119057907"></iframe>
-                    <iframe class="track-iframe" frameborder="0" allow="clipboard-write" src="https://music.yandex.ru/iframe/album/28122625/track/119057909"></iframe>
-                    <iframe class="track-iframe" frameborder="0" allow="clipboard-write" src="https://music.yandex.ru/iframe/album/28122625/track/119057923"></iframe>
-                    <iframe class="track-iframe" frameborder="0" allow="clipboard-write" src="https://music.yandex.ru/iframe/album/28122625/track/119057914"></iframe>
-                    <iframe class="track-iframe" frameborder="0" allow="clipboard-write" src="https://music.yandex.ru/iframe/album/28122625/track/119057930"></iframe>
+                    <!-- Яндекс Музыка -->
+                    <div class="platform-group yandex-group">
+                        <div class="track-item active" frameborder="0" allow="clipboard-write">
+                            <iframe src="https://music.yandex.ru/iframe/album/28122625/track/119057912"></iframe>
+                        </div>
+                        <div class="track-item">
+                            <iframe src="https://music.yandex.ru/iframe/album/28122625/track/119057907"></iframe>
+                        </div>
+                        <div class="track-item">
+                            <iframe src="https://music.yandex.ru/iframe/album/28122625/track/119057909"></iframe>
+                        </div>
+                        <div class="track-item">
+                            <iframe src="https://music.yandex.ru/iframe/album/28122625/track/119057923"></iframe>
+                        </div>
+                        <div class="track-item">
+                            <iframe src="https://music.yandex.ru/iframe/album/28122625/track/119057914"></iframe>
+                        </div>
+                        <div class="track-item">
+                            <iframe src="https://music.yandex.ru/iframe/album/28122625/track/119057930"></iframe>
+                        </div>
+                    </div>
+
+                    <!-- SoundCloud -->
+                    <div class="platform-group soundcloud-group" style="display: none;">
+                        <div class="track-item soundcloud-item">
+                            <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A1661173662&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=false"></iframe>
+                        </div>
+                        <div class="track-item soundcloud-item">
+                            <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A1661172651&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=false"></iframe>
+                        </div>
+                        <div class="track-item soundcloud-item">
+                            <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A1661172825&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=false"></iframe>
+                        </div>
+                        <div class="track-item soundcloud-item">
+                            <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A1661174574&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=false"></iframe>
+                        </div>
+                        <div class="track-item soundcloud-item">
+                            <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A1661173770&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=false"></iframe>
+                        </div>
+                        <div class="track-item soundcloud-item">
+                            <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A1661175462&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=false"></iframe>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Красивый горизонтальный переключатель треков -->
+                <!-- Переключатель источников -->
+                <div class="platform-toggle">
+                    <button class="platform-btn active" id="btnYandex" onclick="switchPlatform('yandex')">Я.Музыка</button>
+                    <button class="platform-btn" id="btnSoundcloud" onclick="switchPlatform('soundcloud')">SoundCloud</button>
+                </div>
+
+                <!-- Переключатель треков -->
                 <div class="track-selector">
                     <button class="track-btn active" onclick="switchTrack(0)">Я утонул в своей ванной</button>
                     <button class="track-btn" onclick="switchTrack(1)">Ржавый</button>
@@ -406,17 +490,51 @@
         let videoTimeout = null;
         let showTextNext = null;
 
-        // Переключение треков в плеере
+        let currentPlatform = 'yandex';
+        let currentTrackIndex = 0;
+
+        // Переключение платформы
+        function switchPlatform(platform) {
+            currentPlatform = platform;
+
+            const yandexGroup = document.querySelector('.yandex-group');
+            const soundcloudGroup = document.querySelector('.soundcloud-group');
+            const btnYandex = document.getElementById('btnYandex');
+            const btnSoundcloud = document.getElementById('btnSoundcloud');
+
+            if (platform === 'yandex') {
+                yandexGroup.style.display = 'block';
+                soundcloudGroup.style.display = 'none';
+                btnYandex.classList.add('active');
+                btnSoundcloud.classList.remove('active');
+            } else {
+                yandexGroup.style.display = 'none';
+                soundcloudGroup.style.display = 'block';
+                btnSoundcloud.classList.add('active');
+                btnYandex.classList.remove('active');
+            }
+
+            updateTrackVisibility();
+        }
+
+        // Переключение трека по индексу
         function switchTrack(index) {
-            const iframes = document.querySelectorAll('.track-iframe');
+            currentTrackIndex = index;
+            updateTrackVisibility();
+
             const buttons = document.querySelectorAll('.track-btn');
-
-            iframes.forEach((iframe, i) => {
-                iframe.classList.toggle('active', i === index);
-            });
-
             buttons.forEach((btn, i) => {
                 btn.classList.toggle('active', i === index);
+            });
+        }
+
+        // Обновление видимости активного трека
+        function updateTrackVisibility() {
+            const activeGroupClass = currentPlatform === 'yandex' ? '.yandex-group' : '.soundcloud-group';
+            const trackItems = document.querySelectorAll(`${activeGroupClass} .track-item`);
+
+            trackItems.forEach((item, i) => {
+                item.classList.toggle('active', i === currentTrackIndex);
             });
         }
 
@@ -451,7 +569,7 @@
             }
         }
 
-        // Логика клика: первый клик случайный (50/50), далее чередование
+        // Логика клика 50/50 + чередование
         wrapper.addEventListener('click', () => {
             if (isAnimating) return;
             isAnimating = true;
